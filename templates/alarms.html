@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if alarms %}
+    <div class="notification is-danger">
+    <table table-layout:auto width="100%" >
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Room id</th>
+            <th>Sensor id</th>
+            <th>Type</th>
+            <th>Alarm</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for alarm in alarms %}
+        <tr>
+            <td>{{alarm['timestamp']}}</td>
+            <td>{{alarm['room_id']}}</td>
+            <td>{{alarm['sensor_id']}}</td>
+            <td>{{alarm['type']}}</td>
+            <td>{{alarm['alarm']}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    </div>
+{% endif %}
+{% endblock %}

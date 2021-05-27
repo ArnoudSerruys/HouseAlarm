@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>House alarm</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'main.css')}}">
+    <script>
+        var intervalFunc;
+        var apiUrl;
+        var soundUrl;
+        var audio;
+
+        function updateAlarmState()
+        {
+            console.log('updating alarm state');
+
+            apiUrl = "{{url_for('main.getstate')}}";
+            soundUrl = "{{url_for('static', filename = 'alarm.wav')}}"
+
+            audio = new Audio(soundUrl);
+
+            getAlarmState();
+            
+            intervalFunc = setInterval(getAlarmState, 2000);
+        }
+
+        function getAlarmState()
+        {
+            fetch(apiUrl, {
+                credentials:'include',
+                headers: {'Content-Type': 'application/json'},
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('api call getstate succes', data)
+
+                if(data.armed)
+                {
+                    document.getElementById("flagArmed").className = "navbar-item button is-large is-danger";
+                }
+                else {
+                    document.getElementById("flagArmed").className = "navbar-item button is-large is-info";
+                }
+                if(data.active)
+                {
+                    audio.play();
+                    document.getElementById("flagActivate").className = "navbar-item button is-large is-danger";
+                }
+                else {
+                    document.getElementById("flagActivate").className = "navbar-item button is-large is-info";
+                }
+            })
+            .catch((error) => {
+                console.log('api call getstate failure', error)
+            });
+        }
+
+    </script>
+</head>
+
+<body onload='updateAlarmState()'>
+    <section class="hero is-primary is-fullheight">
+        <div class="hero-head">
+            <div class="container">
+                <div id="navbarMenuHeroA">
+                    <div>
+                        <a class="button is-info" href="{{ url_for('main.index') }}">Home</a>
+                        <a class="button is-info" href="{{ url_for('auth.profile') }}">Profile</a>
+                        <a class="button is-info" href="{{ url_for('main.config', action='main') }}">Config</a>
+                        <a class="button is-info" href="{{ url_for('auth.login') }}">Login</a>
+                        <a class="button is-info" href="{{ url_for('auth.register') }}">Register</a>
+                        <a class="button is-info" href="{{ url_for('auth.logout') }}">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-body">
+            <div class="container has-text-centered">
+               {% block content %}
+               {% endblock %}
+            </div>
+        </div>
+        <div class="hero-body">
+            <div class="container">
+                <div id="navbarMenuHeroA">
+                    <div class="navbar-start">
+                        <a id="flagArmed" class="navbar-item button is-large is-info"><img src="{{url_for('static', filename = 'Lock-48.png')}}"></img></a>
+                        <a id="flagActivate" class="navbar-item button is-large is-info"><img src="{{url_for('static', filename = 'Device-Bell-48.png')}}"></img></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

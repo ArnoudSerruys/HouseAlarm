@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="title">House alarm</h1>
+<h2 class="subtitle">Config</h2>
+
+{% if sensors %}
+<div class="notification is-warning">
+<table table-layout:auto width="100%" >
+<thead>
+    <tr>
+        <th width="10%">Id</th>
+        <th width="20%">Name</th>
+        <th width="20%">GPIO pin<th>
+    </tr>
+</thead>
+<tbody>
+    {% for sensor in sensors %}
+    <tr>
+        <td>{{sensor['id']}}</td>
+        <td>{{sensor['name']}}</td>
+        <td>{{sensor['GPIO_pin']}}</td>
+        <td>
+            <form method="POST" action="/config/removesensor">
+            <input type="hidden" name="id" value="{{sensor['id']}}">
+            <button class="button is-block is-danger is-fullwidth">remove sensor</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<form method="POST" action="/config/addsensor">
+<table table-layout:auto width="100%" >
+<tbody>
+    <tr>
+        <td width="10%"></td>
+        <td width="20%"><input class="input" type="text" name="name" placeholder="name" autofocus=""></td>
+        <td width="20%"><input class="input" type="text" name="GPIO_pin" placeholder="GPIO pin" autofocus=""></td>
+        <td>
+            <button class="button is-block is-info is-fullwidth">add sensor</button>
+        </td>
+    </tr>
+</tbody>
+</table>
+</form>
+</div>
+{% endif %}
+
+{% if rooms %}
+<div class="notification is-warning">
+<table table-layout:auto width="100%" >
+<thead>
+    <tr>
+        <th width="10%">Id</th>
+        <th width="40%">Name</th>
+    </tr>
+</thead>
+
+<tbody>
+    {% for room in rooms %}
+    <tr>
+        <td>{{room['id']}}</td>
+        <td>{{room['name']}}</td>
+        <td>
+            <form method="POST" action="/config/removeroom">
+            <input type="hidden" name="id" value="{{room[id]}}">
+            <button class="button is-block is-danger is-fullwidth">remove room</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<form method="POST" action="/config/addroom">
+<table table-layout:auto width="100%" >
+<tbody>
+    <tr>
+        <td width="10%"></td>
+        <td width="20%"><input class="input" type="text" name="name" placeholder="name" autofocus=""></td>
+        <td width="20%"></td>
+        <td>
+            <button class="button is-block is-info is-fullwidth">add room</button>
+        </td>
+    </tr>
+</tbody>
+</table>
+</form>
+</div>
+{% endif %}
+
+{% if config %}
+<div class="notification is-warning">
+<table table-layout:auto width="100%" >
+<thead>
+    <tr>
+        <th width="10%">Id</th>
+        <th width="20%">Sensor id</th>
+        <th width="20%">Room id</th>
+    </tr>
+</thead>
+
+<tbody>
+    {% for configline in config %}
+    <tr>
+        <td>{{configline['id']}}</td>
+        <td>{{configline['room_id']}}</td>
+        <td>{{configline['room_id']}}</td>
+        <td>
+            <form method="POST" action="/config/removeconfig">
+            <input type="hidden" name="id" value="{{configline['id']}}">
+            <button class="button is-block is-danger is-fullwidth">remove config</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<form method="POST" action="/config/addconfig">
+<table table-layout:auto width="100%" >
+<tbody>
+    <tr>
+        <td width="10%"></td>
+        <td width="20%"><input class="input" type="text" name="sensor_id" placeholder="sensor id" autofocus=""></td>
+        <td width="20%"><input class="input" type="text" name="room_id" placeholder="room id" autofocus=""></td>
+        <td>
+            <button class="button is-block is-info is-fullwidth">add config</button>
+        </td>
+    </tr>
+</tbody>
+</table>
+</form>
+</div>
+{% endif %}
+
+{% endblock %}

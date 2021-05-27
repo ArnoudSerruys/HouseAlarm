@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">House alarm</h1>
+<h2 class="subtitle">Alarm add sensor</h2>
+<form method="POST" action="/login">
+    <div class="field">
+        <div class="control">
+            <input class="input is-large" type="text" name="sensor" placeholder="a sensor pin number" autofocus="">
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <input class="input is-large" type="text" name="name" placeholder="a name for the sensor">
+        </div>
+    </div>
+
+    <button class="button is-block is-info is-large is-fullwidth">Submit</button>
+</form>
+{% endblock %}
